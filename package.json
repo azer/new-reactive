@@ -1,6 +1,6 @@
 {
   "name": "ada-bind",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Binding Library for Ada (adaio/ada)",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "fox": "*"
   },
   "repository": {
-    "url": "git@github.com:adaio\/bind.git",
+    "url": "git@github.com:adaio/bind.git",
     "type": "git"
   },
   "author": "Azer Koculu <azer@kodfabrik.com>",
