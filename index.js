@@ -45,7 +45,7 @@ function bind(name, prop, fragment){
 }
 
 function elements(parent, ext, value){
-  return parent.querySelectorAll(selector(ext, value));
+  return Array.prototype.slice.call(parent.querySelectorAll(selector(ext, value)));
 }
 
 function extend(attr, callback){
@@ -58,7 +58,7 @@ function selector(ext, value){
 
 extend('text', function(update, elements){
 
-  Array.prototype.forEach.call(elements, function(el){
+  elements.forEach(function(el){
     el.innerHTML = el.value = update;
   });
 
