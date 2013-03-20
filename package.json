@@ -1,6 +1,6 @@
 {
   "name": "ada-bind",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Binding Library for Ada (adaio/ada)",
   "main": "index.js",
   "scripts": {
