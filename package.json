@@ -1,0 +1,19 @@
+{
+  "name": "bind",
+  "version": "0.0.0",
+  "description": "Binding Library for Ada (adaio/ada)",
+  "main": "index.js",
+  "scripts": {
+    "test": "fox"
+  },
+  "devDependencies": {
+    "ada": "*",
+    "fox": "*"
+  },
+  "repository": {
+    "url": "git@github.com:adaio\/bind.git",
+    "type": "git"
+  },
+  "author": "Azer Koculu <azer@kodfabrik.com>",
+  "license": "BSD"
+}
