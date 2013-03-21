@@ -1,14 +1,13 @@
 ## bind
 
-Bind is a minimalist reactive programming library that lets you build your own
-templating system.
+Bind is a minimalist is a UI binding library that lets you build your own UI binding libraries.
 
 It's based on [Ada properties](http://github.com/adaio/ada).
 
 ### Install
 
 ```bash
-$ npm install bind
+$ npm install ada-bind
 ```
 
 ### How does it look?
