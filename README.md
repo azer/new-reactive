@@ -1,6 +1,6 @@
 ## bind
 
-Bind is a minimalist is a UI binding library that lets you build your own UI binding libraries.
+Bind lets you build your own UI->Data binding libraries.
 
 It's based on [Ada properties](http://github.com/adaio/ada).
 
