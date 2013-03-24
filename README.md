@@ -2,7 +2,7 @@
 
 Bind lets you build your own UI->Data binding libraries.
 
-It's based on [Ada properties](http://github.com/adaio/ada).
+It's based on [observable attributes](http://github.com/attrio/attr).
 
 ### Install
 
@@ -22,32 +22,21 @@ Let's create a new binding library lies on "cat" namespace, with attributes like
 <div class="content" cat-class="hidden:!isVisible, new:isRecentlyCreated">
   The title says <span cat-text="title"></span>. How does it sound?
 </div>
+
+<script type="text/javascript">
+
+var title = attr('Hello World');
+
+cat('title', title, document.body); // this is how a new UI binding is created!
+
+oneSecondLater(function(){
+  title('Hello Kitties!')
+})
+
+</script>
 ```
 
 Curious how could you implement it? Keep reading, it's damn simple.
-
-### WTF is the Ada?
-
-Ada is a kind of observable object composes [properties](http://github.com/adaio/prop) and [pubsub](http://github.com/azer/pubsub)
-
-Here is an example usage of it;
-
-```js
-title = ada('Hello World')
-
-title()
-//=> Hello World
-
-title.subscribe(function(update, old){
-  update
-  // => Hello Kitty
-  old
-  // => Hello World
-})
-
-title('Hello Kitty')
-```
-
 
 ### Usage
 
@@ -77,7 +66,7 @@ The title says <span cat-text="title"></span>. How does it sound?
 
 <script type="text/javascript">
 
-var title = ada('Hello World');
+var title = attr('Hello World');
 
 cat('title', title, document.body); // this is how a new UI binding is created!
 
@@ -123,43 +112,42 @@ The binding name comes after the class, and multiple classes are separated with 
 How do we implement `cat-class`? Not as hard as it sounds.
 
 ```js
+var classExt = bind.newExtension('class')
 
-cat.onDefining('class', function(value){
+      .onUpdate(function(update, elements, bindingName, className, not){
+        elements.forEach(function(el){
 
-  var bindingName, className;
+          if(update || not){
+            el.classList.add(className)
+          } else {
+            el.classList.remove(className)
+          }
 
-  return value.split(/,\s?/).map(function(cut){
+        })
+      })
 
-    cut         = cut.split(':')
-    className   = cut[0]
-    bindingName = cut[1]
-    not         = false
+      .onDefining(function(value){
+        var bindingName, className, not
 
-    if( bindingName[0] == '!' ){
-      not = true
-      bindingName = bindingName.slice(1)
-    }
+        return value.split(/,\s?/).map(function(cut){
 
-    return { binding : bindingName,
-             params  : [className, not] }
+          cut         = cut.split(':')
+          className   = cut[0]
+          bindingName = cut[1]
+          not         = false
 
-  })
+          if( bindingName[0] == '!' ){
+            not = true
+            bindingName = bindingName.slice(1)
+          }
 
-})
+          return { binding : bindingName,
+                   params  : [className, not] }
 
-cat.extend('class', function(update, element, bindingName, className, not) {
+        })
+      })
 
-   elements.forEach(function(el){
-
-     if(update || not){
-       el.classList.add(className)
-     } else {
-       el.classList.remove(className)
-     }
-
-   })
-
-})
+cat.extend(classExt)
 ```
 
 The way we bind this kind of complexer attributes doesn't differ:
@@ -181,10 +169,10 @@ Let's complete the example:
 
 <script type="text/javascript">
 
-title             = ada('Hello World')
-url               = ada('http://helloworld.com')
-isRecentlyCreated = ada(true)
-isVisible         = ada(false)
+title             = attr('Hello World')
+url               = attr('http://helloworld.com')
+isRecentlyCreated = attr(true)
+isVisible         = attr(false)
 
 cat('title', title, document.body)
 cat('isRecentlyCreated', isRecentlyCreated, document.body)
