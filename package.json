@@ -1,17 +1,22 @@
 {
-  "name": "ada-bind",
-  "version": "0.0.2",
-  "description": "Binding Library for Ada (adaio/ada)",
+  "name": "new-reactive",
+  "version": "0.0.0",
+  "description": "Build your own binding abstractions, based on observable attributes (npm.im/attr)",
   "main": "index.js",
   "scripts": {
     "test": "fox"
   },
+  "dependencies": {
+    "new-format": "0.0.1",
+    "format-parser": "0.0.2",
+    "ada-on": "0.0.3"
+  },
   "devDependencies": {
-    "ada": "*",
+    "attrs": "*",
     "fox": "*"
   },
   "repository": {
-    "url": "git@github.com:adaio/bind.git",
+    "url": "git@github.com:adaio/new-reactive.git",
     "type": "git"
   },
   "author": "Azer Koculu <azer@kodfabrik.com>",

@@ -1,200 +1,66 @@
-## bind
+## new-reactive
 
-Bind lets you build your own UI->Data binding libraries.
+Lets you build your own UI->Data binding libraries.
 
 It's based on [observable attributes](http://github.com/attrio/attr).
 
 ### Install
 
 ```bash
-$ npm install ada-bind
+$ npm install new-reactive
 ```
-
-### How does it look?
-
-Let's create a new binding library lies on "cat" namespace, with attributes like "text", "href" and "class":
-
-```html
-<h1 cat-text="title"></h1>
-
-<a cat-href="url"></h1>
-
-<div class="content" cat-class="hidden:!isVisible, new:isRecentlyCreated">
-  The title says <span cat-text="title"></span>. How does it sound?
-</div>
-
-<script type="text/javascript">
-
-var title = attr('Hello World');
-
-cat('title', title, document.body); // this is how a new UI binding is created!
-
-oneSecondLater(function(){
-  title('Hello Kitties!')
-})
-
-</script>
-```
-
-Curious how could you implement it? Keep reading, it's damn simple.
 
 ### Usage
 
-**First step:** create the new namespace.
-
-```js
-var cat = bind('cat');
-```
-
-**Second step:** start creating the extensions.
-
-```js
-cat.extend('text', function(update, elements){
-
-  elements.forEach(function(element){
-    element.innerHTML = update;
-  });
-
-});
-```
-
-This code above implements `cat-text`. Now let's look at how do we use it;
-
 ```html
-<h1 cat-text="title"></h1>
-The title says <span cat-text="title"></span>. How does it sound?
+<article class="fruit">
+    <h1 cat-text="title"></h1>
+    <a cat-href="fruits/{slug}/{id}">Apple #<span cat-text="id"></span></h1>
+</article>
 
 <script type="text/javascript">
 
-var title = attr('Hello World');
+    var attrs    = require('attrs'),
+        reactive = require('new-reactive'),
+        cat      = bindings.ns('cat'),
 
-cat('title', title, document.body); // this is how a new UI binding is created!
+        fruit = attrs({
+            id    : 314,
+            slug  : 'finike-oranges',
+            title : 'Finike Oranges'
+        })
 
-oneSecondLater(function(){
-  title('Hello Kitties!')
-})
+    fruit.title()
+    // => 'Finike Oranges'
+
+    reactive(document.querySelector('.fruit'))
+        .context(fruit)
+        .use(cat) // cat is implemented on the next section
+
+    tenSecondsLater(function(){
+        context.id(156)
+        context.slug('delicious-finike-oranges')
+        context.title('Delicious Finike Oranges!!')
+    })
 
 </script>
 ```
 
-As you expect, `h1` and `span` elements will have "Hello World" as content at first. After one second, their content will be replaced by "Hello Kitties!" since
-we change the value of the `title` property.
-
-Here how it works:
-
-* Once you run `cat('title', title, document.body)`, all the matching elements with `cat-text="title"` are passed to the extension callbacks.
-* Extension callback operates the elements with the recent value of the binded property.
-* A wrapper that fires the extension callback subscribes to the binded property.
-
-
-Let's move this example code forward and create a new attribute: `cat-href`
+### Implementation
 
 ```js
-cat.extend('href', function(update, elements){
+var cat = reactive.ns('cat')
 
-  elements.forEach(function(element){
-    element.setAttribute('href', update)
-  })
+cat.extend('href', function(element, update){
+  text.setAttribute('href', update)
+})
 
+cat.extend('text', function(element, update){
+  text.innerHTML = update
 })
 ```
 
-`cat-href` is as simple as `cat-text`. Both expect plain values, and set value on the DOM.
+### TODO
 
-Let's solve a harder problem, implement a new attribute called `cat-class`. This will allow us to
-bind class names with properties. The syntax we want is;
-
-```html
-<div class="content" cat-class="new:isRecentlyCreated, hidden:!isVisible" />
-```
-
-The binding name comes after the class, and multiple classes are separated with comma.
-How do we implement `cat-class`? Not as hard as it sounds.
-
-```js
-var classExt = bind.newExtension('class')
-
-      .onUpdate(function(update, elements, bindingName, className, not){
-        elements.forEach(function(el){
-
-          if(update || not){
-            el.classList.add(className)
-          } else {
-            el.classList.remove(className)
-          }
-
-        })
-      })
-
-      .onDefining(function(value){
-        var bindingName, className, not
-
-        return value.split(/,\s?/).map(function(cut){
-
-          cut         = cut.split(':')
-          className   = cut[0]
-          bindingName = cut[1]
-          not         = false
-
-          if( bindingName[0] == '!' ){
-            not = true
-            bindingName = bindingName.slice(1)
-          }
-
-          return { binding : bindingName,
-                   params  : [className, not] }
-
-        })
-      })
-
-cat.extend(classExt)
-```
-
-The way we bind this kind of complexer attributes doesn't differ:
-
-```js
-cat('isRecentlyCreated', isRecentlyCreated, document.body)
-```
-
-Let's complete the example:
-
-```html
-<h1 cat-text="title"></h1>
-
-<a cat-href="url"></h1>
-
-<div class="content" cat-class="hidden:!isVisible, new:isRecentlyCreated">
-  The title says <span cat-text="title"></span>. How does it sound?
-</div>
-
-<script type="text/javascript">
-
-title             = attr('Hello World')
-url               = attr('http://helloworld.com')
-isRecentlyCreated = attr(true)
-isVisible         = attr(false)
-
-cat('title', title, document.body)
-cat('isRecentlyCreated', isRecentlyCreated, document.body)
-cat('isVisible', isVisible, document.body)
-
-oneSecondLater(function(){
-  title('Hello Kitties!')
-  url('http://hellokitties.com')
-  isVisible(true)
-})
-
-tenMinutesLater(function(){
-  isRecentlyCreated(false)
-})
-
-</script>
-```
-
-### Destroying Objects
-
-```js
-binding = cat('title', title, document.body)
-
-tenMinutesLater(binding.destroy)
-```
+* Impl destroy methods
+* Test iterating

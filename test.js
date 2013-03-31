@@ -1,71 +1,84 @@
-var ada  = require('ada'),
-    bind = require('./');
+var attrs    = require('attrs'),
+    reactive = require('./');
 
 function later(fn){ setTimeout(fn, 100); }
 
 before(function(done){
+
   $('body').append('<div id="sandbox"></div>');
+
   done();
-});
-
-describe('bind', function(){
-
-  var sandbox;
-
-  beforeEach(function(){
-    sandbox = document.getElementById('sandbox');
-
-    sandbox.innerHTML =
-      '<h1 data-text="title"></h1>'
-      + '<input data-text="title"></input>'
-      + '<a data-href="title"></a>';
-  });
-
-  it('is an abstracted, extendible basic binding impl', function(done){
-
-    var title = window.tits = ada('Hello Kitty.');
-
-    window.b = bind('title', title, sandbox);
-
-  });
 
 });
 
+describe('fragment', function(){
 
+  var context;
 
+  beforeEach(function(done){
 
+    var html = '<article>'
+          + '<h1 cat-text="title">title</h1>'
+          + 'Title is <a cat-href="foo/bar/{slug}" cat-content="link to foo/bar/{slug}"></a>'
+          + '<h2 cat-id="kitten-{slug}-{id}" cat-content="greeting is {greeting}"></h2>'
+          + '</article>';
 
-/*
+    context = attrs({
+      id       : 0,
+      slug     : 'this-is-the-title',
+      title    : 'This is the title.',
+      greeting : 'Welcome yo!'
+    });
 
-describe('data-text', function(){
+    $('#sandbox').html(html);
 
-  var sandbox = document.getElementById('sandbox');
+    done();
 
-  beforeEach(function(){
-    $("#sandbox").html('<div class="foo" data-text="foo"></div> <div class="bar" data-text="bar"></div>');
   });
 
-  it('updates the content on setup', function(done){
+  it('adds a new extension', function(){
 
-    var content = {
-      foo: ada('3.14'),
-      bar: ada('156')
-    };
+    var cat = reactive.ns('cat');
 
-    bind(sandbox, content)
+    cat.extend('text', function(binding){
+
+    });
+
+    expect(cat.extensions.text.update).to.be.a('function');
+
+  });
+
+  it('distributes context updates to extensions', function(done){
+
+    var cat = reactive.ns('cat');
+
+    cat.extend('id', function(element, update){
+      element.setAttribute('id', update);
+    });
+
+    cat.extend('content', function(element, update){
+      element.innerHTML = update;
+    });
+
+    cat.extend('text', function(element, update){
+      element.innerHTML = update;
+    });
+
+    cat.extend('href', function(element, update){
+      element.setAttribute('href', update);
+    });
+
+    reactive(document.querySelector('article'))
+      .context(context)
+      .use(cat);
 
     later(function(){
-      var f = $('.foo').text(),
-          b = $('.bar').text();
-
-      expect(f).to.equal('3.14');
-      expect(b).to.equal('156');
-
-      done();
-
+      context.title('hello kittiz');
+      context.greeting('wilkommen yo!');
+      context.slug('slugggg');
+      context.id('iddddd');
     });
 
   });
 
 });
-*/
