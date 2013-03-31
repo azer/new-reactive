@@ -1,6 +1,6 @@
 ## new-reactive
 
-Lets you build your own UI->Data binding libraries.
+Lets you build your own UI binding abstractions.
 
 It's based on [observable attributes](http://github.com/attrio/attr).
 
