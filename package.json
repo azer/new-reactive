@@ -4,7 +4,7 @@
   "description": "Build your own binding abstractions, based on observable attributes (npm.im/attr)",
   "main": "index.js",
   "scripts": {
-    "test": "fox"
+    "test": "indev test template.js"
   },
   "dependencies": {
     "new-format": "0.0.1",
@@ -12,6 +12,7 @@
     "ada-on": "0.0.3"
   },
   "devDependencies": {
+    "ada-list": "*",
     "attrs": "*",
     "fox": "*"
   },

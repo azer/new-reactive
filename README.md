@@ -4,13 +4,13 @@ Lets you build your own UI binding abstractions.
 
 It's based on [observable attributes](http://github.com/attrio/attr).
 
-### Install
+## Install
 
 ```bash
 $ npm install new-reactive
 ```
 
-### Usage
+## Usage
 
 ```html
 <article class="fruit">
@@ -58,6 +58,14 @@ cat.extend('href', function(element, update){
 cat.extend('text', function(element, update){
   text.innerHTML = update
 })
+```
+
+## Testing
+
+Install [indev](http://github.com/azer/indev) first, and;
+
+```js
+$ indev test template.js
 ```
 
 ### TODO

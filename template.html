@@ -1,0 +1,26 @@
+<style type="text/css" media="screen">
+  article { position: fixed; top: 0; right: 0; width: 500px; height: 100%; background: #f7f7f7; padding: 20px; color: #111; }
+  article h1 { color: #008888 }
+  article h2 { color: #884400; }
+  article ul { background: #fff; border: 1px solid #f0f0f0; padding: 10px 30px; }
+</style>
+
+<article>
+
+  <h1 cat-text="title">title</h1>
+
+  The title of this context is <strong cat-content="{title}"></strong>
+
+  And here is <a cat-href="foo/bar/{slug}" cat-content="a link to foo/bar/{slug}"></a>
+
+  <h2 cat-id="kitten-{slug}-{id}" cat-content='The greeting is "{greeting}"'></h2>
+
+  <ul class="fruits" cat-iter="fruits">
+    <li cat-class="fruit {name}" cat-content="{price} - {name}"></li>
+  </ul>
+
+  <ul class="animals" cat-iter="animals">
+    <li class="animal {.}" cat-content="{.}"></li>
+  </ul>
+
+</article>

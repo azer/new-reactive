@@ -1,0 +1,10 @@
+task 'test', 'index.js', 'lib', 'test.js', 'template.js', ->
+    exec 'fox -b -i template.js'
+
+target 'template.js', 'template.html', ->
+    write 'template.js', html2js(cat 'template.html')
+
+html2js = (html) ->
+    output = 'module.exports = "'
+    output += html.replace(/\"/g, '\\"').replace /\n/g, ' '
+    output += '";'
