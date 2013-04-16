@@ -42,8 +42,7 @@ describe('initializing', function(){
       parent.insertBefore(el, parent.children[index]);
 
       if(typeof context != 'object'){
-        el.innerHTML = context;
-        return;
+        context = attrs({ '.' : context });
       }
 
       reactive(el)
@@ -89,7 +88,7 @@ describe('initializing', function(){
           expect($('.fruits li')[0].innerHTML).to.equal('$3 - Apple');
           expect($('.fruits li')[1].innerHTML).to.equal('$2 - Orange');
           expect($('.fruits li')[2].innerHTML).to.equal('$3.33 - MUZ');
-          done();
+          //done();
         });
 
       });
