@@ -1,5 +1,5 @@
 var attrs    = require('attrs'),
-    List     = require('ada-list'),
+    List     = require('new-list'),
     reactive = require('../'),
     template = require('./template'),
     context;
@@ -31,6 +31,60 @@ describe('initializing', function(){
 
     var cat = reactive.ns('cat');
 
+    cat.extend('content', function(element, update){
+      element.innerHTML = update;
+    });
+
+    cat.extend('iter')
+      .init(function(element, context, template){
+
+        context.forEach(function(item){
+          addRow(element, -1, template, item);
+        });
+
+        context.subscribe(function(update){
+
+          if(update.remove){
+            i = update.remove.length;
+            while(i--)
+              element.removeChild( element.children[update.remove[i]] );
+          }
+
+          var i;
+          if(update.add){
+            for(i in update.add) addRow(element, i, template, update.add[i]);
+          }
+
+        });
+
+      })
+      .block();
+
+    reactive(document.querySelector('article'))
+      .context(context)
+      .use(cat);
+
+    later(function(){
+
+      var banana = attrs({ name: banana, price: '$1' });
+      context.fruits.push(banana);
+      context.animals.push('Kortis');
+
+      later(function(){
+        banana.name('MUZ');
+        banana.price('$3.33');
+
+        later(function(){
+          expect($('.fruits li')[0].innerHTML).to.equal('$3 - Apple');
+          expect($('.fruits li')[1].innerHTML).to.equal('$2 - Orange');
+          expect($('.fruits li')[2].innerHTML).to.equal('$3.33 - MUZ');
+          done();
+        });
+
+      });
+
+    });
+
     function addRow(parent, index, template, context){
       var frag, el;
 
@@ -49,51 +103,6 @@ describe('initializing', function(){
         .context(context)
         .use(cat);
     }
-
-    cat.extend('content', function(element, update){
-      element.innerHTML = update;
-    });
-
-    cat.extend('iter')
-      .init(function(element, context, template){
-        var items = context.content();
-
-        items.forEach(function(item){
-          addRow(element, -1, template, item);
-        });
-
-        context.subscribe(function(update){
-          update.add && addRow(element, update.index, template, update.add);
-          update.remove && element.removeChild( element.children[update.index] );
-        });
-
-      })
-      .block();
-
-    reactive(document.querySelector('article'))
-      .context(context)
-      .use(cat);
-
-    later(function(){
-
-      var banana = attrs({ name: banana, price: '$1' });
-      context.fruits.add(banana);
-      context.animals.add('Kortis');
-
-      later(function(){
-        banana.name('MUZ');
-        banana.price('$3.33');
-
-        later(function(){
-          expect($('.fruits li')[0].innerHTML).to.equal('$3 - Apple');
-          expect($('.fruits li')[1].innerHTML).to.equal('$2 - Orange');
-          expect($('.fruits li')[2].innerHTML).to.equal('$3.33 - MUZ');
-          done();
-        });
-
-      });
-
-    });
 
   });
 
@@ -157,17 +166,10 @@ before(function(done){
 });
 
 beforeEach(function (done){
-  console.log('before each');
-
   var apple   = attrs({ name: 'Apple', price: '$3' }),
       orange  = attrs({ name: 'Orange', price: '$2' }),
       fruits  = List(apple, orange),
       animals = List('Nala', 'dongdong');
-
-  fruits.subscribe(function(update){
-  });
-
-  animals.subscribe(function(){});
 
   context = window.context = attrs({
     id       : 0,

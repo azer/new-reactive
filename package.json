@@ -9,10 +9,10 @@
   "dependencies": {
     "new-format": "0.0.1",
     "format-parser": "0.0.2",
-    "ada-on": "0.0.3"
+    "subscribe": "0.0.0"
   },
   "devDependencies": {
-    "ada-list": "*",
+    "new-list": "*",
     "attrs": "*",
     "fox": "*"
   },

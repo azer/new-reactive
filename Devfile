@@ -1,6 +1,13 @@
 task 'test', 'index.js', 'lib', 'test', ->
     exec 'fox -b -i test/template.js'
 
+task 'example', './example', ->
+    cd 'example'
+    exec 'python2 -m SimpleHTTPServer ' + ( process.env.PORT || 7560 )
+
+target 'example/libs.js', ->
+    exec 'browserify index.js -r new-reactive,attrs,new-list -o example/libs.js'
+
 target 'test/template.js', 'test/template.html', ->
     cd 'test'
     write 'template.js', html2js(cat 'template.html')
