@@ -2,7 +2,7 @@
 
 Lets you build your own UI binding abstractions.
 
-It's based on [observable attributes](http://github.com/attrio/attr).
+It's based on [observable attributes](http://github.com/azer/attr).
 
 ## Install
 
@@ -71,4 +71,3 @@ $ indev test template.js
 ### TODO
 
 * Impl destroy methods
-* Test iterating
