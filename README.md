@@ -71,3 +71,6 @@ $ indev test template.js
 ### TODO
 
 * Impl destroy methods
+
+
+![](https://dl.dropboxusercontent.com/s/i8pe75dnxguj7s7/npmel_5.jpg)
