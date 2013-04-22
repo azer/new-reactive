@@ -17,7 +17,7 @@
     "fox": "*"
   },
   "repository": {
-    "url": "git@github.com:adaio/new-reactive.git",
+    "url": "git@github.com:azer/new-reactive.git",
     "type": "git"
   },
   "author": "Azer Koculu <azer@kodfabrik.com>",
